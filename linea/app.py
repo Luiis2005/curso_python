@@ -1,4 +1,5 @@
 import funciones
+import argparse
 
 def main(m, b):
     X = [x/10.5 for x in range(1,101,10)]
@@ -7,5 +8,11 @@ def main(m, b):
     print(Y)
     coordenadas = list(zip(X,Y))
     print(coordenadas)
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Calcula las coordenadas de una linea recta')
+    parser.add_argument('-m', type=float, help='Pendiente de la linea', default=2.0)
+    parser.add_argument('-b', type=float, help='Intersrccion en y', default=3.0)
+    args = parser.parse_args()
+    main(args.m, args.b)
     main(2,3)
