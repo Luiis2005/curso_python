@@ -1,31 +1,43 @@
-
+'''
+Programa principal del juego del ahorcado
+'''
+import os
 import string
 import unicodedata
+import argparse
 from random import choice
 import funciones as fn
 
 def main(archivo_texto:str, nombre_plantilla='plantilla'):
-
-    oraciones = fn 
-
-    #cargo las plantillas
+    '''
+    Programa principal del juego del ahorcado
+    '''
+    # cargamos las plantillas
     plantillas = fn.carga_plantillas(nombre_plantilla)
-
-    #cargamos las oraciones
+    # cargamos las oraciones
     oraciones = fn.carga_archivo_texto(archivo_texto)
-    #obtenemos las palabras
+    # obtenemos las palabras
     palabras = fn.obten_palabras(oraciones)
     o = 5 # 5 oportunidades de fallar
     p = choice(palabras) # elegimos una palabra al azar
     abcdario = {letra:letra for letra in string.ascii_lowercase}
     adivinadas = set()
-    while o> 0:
+    while o>0:
         fn.despliega_plantilla(plantillas, o)
-        fn.adivina_letra(abcdario, p, adivinadas, o)
+        o = fn.adivina_letra(abcdario, p, adivinadas, o)
         if p == ''.join([letra if letra in adivinadas else '_' for letra in p]):
-            print(f'Felicidades, adivinaste la palabra {p}')
+            print('Felicidades, adivinaste la palabra es {p}')
             break
+    print(f"La palabra era: {p}")
 
 if __name__ == '__main__':
-    archivo = './datos/pg15532.txt'
-    main(archivo)
+    parser = argparse.ArgumentParser()
+    descripcion= 'Juego del ahorcado'
+    parser.add_argument('-a', '--archivo', help='Archivo de texto con palabras a adivinar', default='./datos/pg15532.txt')
+    args = parser.parse_args()
+    archivo = args.archivo
+    if os.stat(archivo) is False:
+        print(f'El archivo {archivo} no existe')
+    else:
+        main(archivo)
+    archivo = './datos/pg58221.txt'
