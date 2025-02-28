@@ -6,6 +6,7 @@ from Athlete import Athlete
 from Sport import Sport
 from Team import Team
 from Game import Game
+import game_logic as gl
 
 
 def main(archivo_torneo:str):
@@ -23,33 +24,37 @@ def main(archivo_torneo:str):
                            'Isco', 'Busquets', 'Costa', 
                            'Morata', 'Asensio']
         players_brasil = ['Neymar', 'Coutinho', 'Marcelo',
-                            'Alisson', 'Casemiro', 'Jesus',
-                            'Paulinho', 'Thiago Silva', 'Firmino',
-                            'Willian', 'Danilo']
+                            'Casemiro', 'Alisson', 'Jesus',
+                            'Paulinho', 'Thiago', 'Silva',
+                            'Firmino', 'Danilo']
         players_argentina = ['Messi', 'Aguero', 'Di Maria',
-                              'Higuain', 'Mascherano', 'Otamendi',
-                              'Banega', 'Dybala', 'Rojo',
-                              'Biglia', 'Mercado']
-        
+                             'Mascherano', 'Higuain', 'Dybala',
+                             'Otamendi', 'Romero', 'Rojo',
+                             'Banega', 'Fazio']
         lista_mexico = [Athlete(x) for x in players_mexico]
         lista_espania = [Athlete(x) for x in players_espania]
         lista_brasil = [Athlete(x) for x in players_brasil]
-        lista_argentina = [Athlete(x) for x in players_argentina]
+        lista_argentina = [Athlete(x) for x in players_argentina]  
         soccer = Sport("Soccer", 11, "FIFA")
         mexico = Team("Mexico", soccer, lista_mexico)
         espania = Team("España", soccer, lista_espania)
         brasil = Team("Brasil", soccer, lista_brasil)
         argentina = Team("Argentina", soccer, lista_argentina)
         equipos = [mexico, espania, brasil, argentina]
+
         d = {}
         for local in equipos:
             for visitante in equipos:
                 if local != visitante:
                     juego = Game(local, visitante)
-                    d[juego.to_json()['A']['name']] = juego.to_json()
+                    partido = f'{local} - {visitante}'
+                    partido_2 = f'{visitante} - {local}'
+                    if partido not in d and partido_2 not in d:
+                        d[partido] = juego.to_json()
+        #print(d.keys())
         torneo = list(d.values())
-        # juego = Game(mexico, espania)
-        # torneo = [juego.to_json()]
+        #juego = Game(mexico, espania)
+        #torneo = [juego.to_json()]
         archivo_torneo = "torneo.json"
         with open(archivo_torneo, "w", encoding='utf8') as f:
             json.dump(torneo, f, ensure_ascii=False, indent=4)
@@ -69,7 +74,14 @@ def main(archivo_torneo:str):
         game = Game(A, B)
         game.play()
         print(game)
+        juego['score'] = game.score
         print("----------------")
+    # Calcular el tablero de puntuación 
+    for juego in torneo:
+        print(juego['score'])
+    #torneo = gl.json_to_tournament(torneo)
+    tablero = gl.scoring(torneo)
+    gl.display_tablero(tablero) 
 
 if __name__ == "__main__":
     archivo = "torneo.json"
