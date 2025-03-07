@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libros Web - Busqueda por titulo</title>
+</head>
+<body>
+    <h1>Libros Web </h1>
+    <h2>Busqueda por titulo</h2>
+    <form action="/titulo/" method="post">
+        <label for="titulo">Titulo:</label>
+        <input type="text" id="titulo" name="titulo">
+        <input type="submit" value="Buscar">
+    </form>
+    <h2>Resultados</h2>
+    <ul>
+        {% for libro in lista_libros %}
+            <li>{{ libro.titulo }} - {{ libro.autor }}</li>
+        {% endfor %}
+    </ul>
+    <h3>Menu</h3>
+    <p>En esta pagina eencontraras una coleccion de libros de todo tipo</p>
+    <ul>
+        <li><a href="/inicio/"></a></li>
+        <li><a href="/autor/">Busqueda por autor</a></li>
+        <li><a href="/letra/">Desplegar por letra</a></li>
+    </ul>
+
+    
+</body>
+</html>
